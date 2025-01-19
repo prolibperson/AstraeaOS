@@ -7,6 +7,8 @@ then do make or make run
 you also need qemu-system-i386
 
 plans:
+custom bootloader
+64 bit
 fully functional shell with commands and stuff
 move away from vga text mode and move to vesa bios modes
 fat32 filesystem
