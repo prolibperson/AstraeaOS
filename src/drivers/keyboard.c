@@ -61,9 +61,9 @@ void keyboard_handler_c(void) {
 
 void keyboard_init(void) {
     uint8_t status = inb(KEYBOARD_CMD_PORT);
-#ifdef DEBUG_BUILD
+    /* (debug) */
     terminal_printf(PRINT_DEBUG, "Keyboard controller status: 0x%x\n", status);
-#endif
+
 
     idt_set_entry(33, (uint32_t)keyboard_handler_stub, 0x08, 0x8E);
 }

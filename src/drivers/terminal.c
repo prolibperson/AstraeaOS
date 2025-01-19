@@ -90,9 +90,13 @@ void terminal_printf(uint8_t print_type, const char* format, ...) {
             prefix = "[INIT]";
             break;
         case PRINT_DEBUG:
+#ifndef  DEBUG_BUILD
+                return;
+#else
             terminal_setcolor(VGA_COLOR_CYAN);
             prefix = "[DEBUG]";
             break;
+#endif
         case PRINT_ERROR:
             terminal_setcolor(VGA_COLOR_RED);
             prefix = "[ERROR]";

@@ -4,7 +4,7 @@
 #include "keyboard.h"
 #include "port.h"
 
-// kernel entrypoint
+/* kernel entrypoint */
 void kernel_main(void) {
     /* init terminal */
     terminal_initialize();
@@ -25,23 +25,19 @@ void kernel_main(void) {
     keyboard_init();
     terminal_printf(PRINT_INIT, "Keyboard initialized\n");
 
-#ifdef DEBUG_BUILD 
     /* (debug) check pic masks */
     uint8_t master_mask = inb(0x21);
     uint8_t slave_mask = inb(0xA1);
     terminal_printf(PRINT_DEBUG, "PIC Masks: Master=0x%x, Slave=0x%x\n", master_mask, slave_mask);
-#endif
 
     /* remap pic */
     pic_remap();
     terminal_printf(PRINT_INIT, "PIC Remapped\n");
 
-#ifdef DEBUG_BUILD 
     /* (debug) check pic masks again */
     uint8_t master_mask2 = inb(0x21);
     uint8_t slave_mask2 = inb(0xA1);
     terminal_printf(PRINT_DEBUG, "PIC Masks: Master=0x%x, Slave=0x%x\n", master_mask2, slave_mask2);
-#endif
 
     /* enable interrupts */
     terminal_printf(PRINT_INIT, "Enabling interrupts...\n");
