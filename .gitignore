@@ -1,0 +1,13 @@
+/build/
+
+prolibos.iso
+
+/isodir/
+
+prolibos.bin
+
+*.o
+$(BUILD_DIR)/*.o
+$(BUILD_DIR)/boot.o
+
+$(BUILD_DIR)/prolibos.bin
