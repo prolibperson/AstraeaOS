@@ -34,7 +34,7 @@ void kernel_main(void) {
 
     /* remap pic */
     pic_remap();
-    terminal_printf(PRINT_INIT, "PIC Remapped.\n");
+    terminal_printf(PRINT_INIT, "PIC Remapped\n");
 
 #ifdef DEBUG_BUILD 
     /* (debug) check pic masks again */
