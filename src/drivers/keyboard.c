@@ -52,7 +52,12 @@ void keyboard_handler_c(void) {
         if (!(scancode & 0x80)) {
             char key_char = scancode_to_char[scancode];
             if (key_char) {
-                if (key_buffer_pos < KEY_BUFFER_SIZE - 1) {
+                if (scancode == '\b') {
+                    if (key_buffer_pos > 0) {
+                        key_buffer_pos--;
+                        terminal_putchar('\b');
+                    }
+                } else if (key_buffer_pos < KEY_BUFFER_SIZE - 1) {
                     key_buffer[key_buffer_pos++] = key_char;
                 }
             }

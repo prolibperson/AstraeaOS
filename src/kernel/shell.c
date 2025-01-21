@@ -40,9 +40,17 @@ void shell_run(void) {
         terminal_writestring("\nuser@prolibOS $ ");
         input_len = 0;
 
+        size_t prompt_len = strlen(input) - 1;
+        input_len = 0;
+
         char c;
         while ((c = terminal_getchar()) != '\n') {
-            if (input_len < sizeof(input) - 1) {
+            if (c == '\b') {
+                if (input_len > 0) {
+                    input_len--;
+                    terminal_putchar('\b');
+                }
+            } else if (input_len < sizeof(input) - 1) {
                 input[input_len++] = c;
                 terminal_putchar(c);
             }
