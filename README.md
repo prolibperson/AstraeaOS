@@ -7,6 +7,7 @@ then do make or make run
 you also need qemu-system-i386
 
 plans:
+
 custom bootloader; 
 
 64 bit; 
