@@ -3,8 +3,6 @@
 
 #include "global.h"
 
-#include "vga.h"
-
 enum print_type {
 	PRINT_INIT = 0,
 	PRINT_DEBUG = 1,

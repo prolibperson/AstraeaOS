@@ -88,7 +88,6 @@ void *memmove(void *dest, const void *src, size_t n) {
     }
 
     if (d < s) {
-        // Copy forward
         for (size_t i = 0; i < n; i++) {
             d[i] = s[i];
         }
@@ -99,4 +98,58 @@ void *memmove(void *dest, const void *src, size_t n) {
     }
 
     return dest;
+}
+
+char* strchr(const char* str, int c) {
+    while (*str) {
+        if (*str == (char)c) {
+            return (char*)str;
+        }
+        str++;
+    }
+
+    if (c == '\0') {
+        return (char*)str;
+    }
+
+    return NULL;
+}
+
+static char* strtok_save_ptr = NULL;
+
+char* strtok(char* str, const char* delimiters) {
+    char* start;
+    char* end;
+
+    if (str != NULL) {
+        strtok_save_ptr = str;
+    }
+
+    if (strtok_save_ptr == NULL) {
+        return NULL;
+    }
+
+    start = strtok_save_ptr;
+    while (*start && strchr(delimiters, *start)) {
+        start++;
+    }
+
+    if (*start == '\0') {
+        strtok_save_ptr = NULL;
+        return NULL;
+    }
+
+    end = start;
+    while (*end && !strchr(delimiters, *end)) {
+        end++;
+    }
+
+    if (*end) {
+        *end = '\0';
+        strtok_save_ptr = end + 1;
+    } else {
+        strtok_save_ptr = NULL;
+    }
+
+    return start;
 }

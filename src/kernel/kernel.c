@@ -3,6 +3,8 @@
 #include "gdt.h"
 #include "keyboard.h"
 #include "port.h"
+#include "libc.h"
+#include "shell.h"
 
 /* kernel entrypoint */
 void kernel_main(void) {
@@ -47,11 +49,13 @@ void kernel_main(void) {
     outb(0x21, inb(0x21) & ~0x02);
     terminal_printf(PRINT_INIT, "Keyboard interrupts unmasked\n");
 
-    /* (placeholder) print the shell thingy until */
-    /* i implement an actual proper shell system  */
-    terminal_writestring("root@prolibOS $ ");
+    /* hallo */
+    terminal_printf(PRINT_INIT, "Starting shell\n");
 
-    /* halt cpu */
+    /* start shell */
+    shell_run();
+
+    /* halt cpu if shell isnt running */
     while (1) {
         asm volatile ("hlt");
     }

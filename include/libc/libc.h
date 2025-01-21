@@ -11,5 +11,7 @@ void* memset(void* ptr, int value, size_t num);
 void* memcpy(void* dest, const void* src, size_t num);
 void itoa(int value, char* buffer, int base);
 void *memmove(void *dest, const void *src, size_t n);
+char* strtok(char* str, const char* delimiters);
+char* strchr(const char* str, int c);
 
 #endif // LIBC_H

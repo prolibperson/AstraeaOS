@@ -7,6 +7,10 @@
 #define KEYBOARD_CMD_PORT 0x64
 #define INTERRUPT_ACK 0x20
 
+#define KEY_BUFFER_SIZE 256
+static char key_buffer[KEY_BUFFER_SIZE];
+static size_t key_buffer_pos = 0;
+
 extern void keyboard_handler_stub();
 
 // US QWERTY keyboard scancode to ASCII map
@@ -48,16 +52,26 @@ void keyboard_handler_c(void) {
         if (!(scancode & 0x80)) {
             char key_char = scancode_to_char[scancode];
             if (key_char) {
-                terminal_putchar(key_char);
-            } else {
-                //terminal_printf(PRINT_ERROR, "Unknown scancode: 0x%x\n", scancode);
+                if (key_buffer_pos < KEY_BUFFER_SIZE - 1) {
+                    key_buffer[key_buffer_pos++] = key_char;
+                }
             }
         }
     }
-
-    outb(0x20, 0x20);
+    outb(0x20, INTERRUPT_ACK);
 }
 
+char terminal_getchar(void) {
+    while (key_buffer_pos == 0) {
+        asm volatile ("hlt");
+    }
+    char c = key_buffer[0];
+    for (size_t i = 1; i < key_buffer_pos; i++) {
+        key_buffer[i - 1] = key_buffer[i];
+    }
+    key_buffer_pos--;
+    return c;
+}
 
 void keyboard_init(void) {
     uint8_t status = inb(KEYBOARD_CMD_PORT);
