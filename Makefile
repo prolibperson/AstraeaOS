@@ -14,6 +14,7 @@ ASM_OBJECTS = $(ASM_FILES:$(SRC_DIR)/%.asm=$(BUILD_DIR)/%.o)
 LINKER_SCRIPT = $(SRC_DIR)/boot/linker.ld
 OUTPUT_BIN = $(BUILD_DIR)/prolibos.bin
 ISO_FILE = prolibosBETA.iso
+ISO_FILE_RELEASE = prolibos.iso
 GRUB_CFG = $(SRC_DIR)/boot/grub.cfg
 
 CFLAGS = -std=gnu99 -ffreestanding -O2 -Wall -Wextra $(addprefix -I, $(shell find $(INCLUDE_DIR) -type d))
@@ -22,9 +23,11 @@ LDFLAGS = -ffreestanding -O2 -nostdlib
 SOURCES = $(shell find $(SRC_DIR) -name '*.c')
 OBJECTS = $(SOURCES:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
-.PHONY: all clean run
+.PHONY: all clean run release run-release
 
-all: $(ISO_FILE)
+all: clean $(ISO_FILE)
+
+$(ISO_FILE): CFLAGS += -DDEBUG_BUILD
 
 $(BOOT_FILE): $(SRC_DIR)/boot/boot.s
 	$(AS) $< -o $@
@@ -46,8 +49,20 @@ $(ISO_FILE): $(OUTPUT_BIN) $(GRUB_CFG)
 	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub/grub.cfg
 	$(GRUB_MKRESCUE) -o $@ $(ISO_DIR)
 
-run: $(ISO_FILE)
-	$(QEMU) -cdrom $<
+$(ISO_FILE_RELEASE): clean $(OUTPUT_BIN) $(GRUB_CFG)
+	mkdir -p $(ISO_DIR)/boot/grub
+	cp $(OUTPUT_BIN) $(ISO_DIR)/boot/prolibos.bin
+	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub/grub.cfg
+	$(GRUB_MKRESCUE) -o $@ $(ISO_DIR)
+
+release: $(ISO_FILE_RELEASE)
+	@echo "Release ISO created: $(ISO_FILE_RELEASE)"
+
+run: all
+	$(QEMU) -cdrom $(ISO_FILE)
+
+run-release: release
+	$(QEMU) -cdrom $(ISO_FILE_RELEASE)
 
 clean:
-	rm -rf $(BUILD_DIR)/* $(ISO_FILE) $(ISO_DIR) prolibos.bin
+	rm -rf $(BUILD_DIR)/* $(ISO_FILE) $(ISO_FILE_RELEASE) $(ISO_DIR) prolibos.bin

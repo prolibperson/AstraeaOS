@@ -6,6 +6,8 @@ prolibos.iso
 
 prolibos.bin
 
+gitpublish.sh
+
 *.o
 $(BUILD_DIR)/*.o
 $(BUILD_DIR)/boot.o
