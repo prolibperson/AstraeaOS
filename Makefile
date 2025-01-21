@@ -14,7 +14,7 @@ ASM_OBJECTS = $(ASM_FILES:$(SRC_DIR)/%.asm=$(BUILD_DIR)/%.o)
 LINKER_SCRIPT = $(SRC_DIR)/boot/linker.ld
 OUTPUT_BIN = $(BUILD_DIR)/prolibos.bin
 ISO_FILE = prolibosBETA.iso
-ISO_FILE_RELEASE = prolibos.iso
+ISO_FILE_RELEASE = release/prolibos.iso
 GRUB_CFG = $(SRC_DIR)/boot/grub.cfg
 
 CFLAGS = -std=gnu99 -ffreestanding -O2 -Wall -Wextra $(addprefix -I, $(shell find $(INCLUDE_DIR) -type d))
