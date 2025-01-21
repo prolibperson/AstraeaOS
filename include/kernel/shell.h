@@ -13,4 +13,4 @@ typedef struct {
 void shell_run(void);
 void shell_help(void);
 void shell_echo(void);
-
+void shell_clear(void);

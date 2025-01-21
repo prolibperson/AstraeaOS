@@ -7,10 +7,15 @@ char* command_arguments = NULL;
 
 static const shell_command_t commands[] = {
     { "help", "List all available commands", shell_help },
-    { "echo", "Print text to the terminal", shell_echo },
+    { "echo", "Print text to the terminal",  shell_echo },
+    { "clear","Clear the terminal",          shell_clear },
 };
 
 static const size_t command_count = sizeof(commands) / sizeof(commands[0]);
+
+void shell_clear(void) {
+    terminal_clear(); 
+}
 
 void shell_help(void) {
     terminal_writestring("Available commands:\n");
