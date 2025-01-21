@@ -37,9 +37,9 @@ void kernel_main(void) {
     terminal_printf(PRINT_INIT, "PIC Remapped\n");
 
     /* (debug) check pic masks again */
-    uint8_t master_mask2 = inb(0x21);
-    uint8_t slave_mask2 = inb(0xA1);
-    terminal_printf(PRINT_DEBUG, "PIC Masks: Master=0x%x, Slave=0x%x\n", master_mask2, slave_mask2);
+    master_mask = inb(0x21);
+    slave_mask = inb(0xA1);
+    terminal_printf(PRINT_DEBUG, "PIC Masks: Master=0x%x, Slave=0x%x\n", master_mask, slave_mask);
 
     /* enable interrupts */
     terminal_printf(PRINT_INIT, "Enabling interrupts...\n");
