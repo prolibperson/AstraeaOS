@@ -2,9 +2,15 @@
 
 toy project for curing boredom
 
+running:
+
+you need qemu-system-i386
+
+then do make run or make run-release
+
+
 building: https://wiki.osdev.org/GCC_Cross-Compiler
-then do make or make run
-you also need qemu-system-i386
+then do make
 
 plans:
 
