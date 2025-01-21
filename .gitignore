@@ -1,8 +1,8 @@
 /build/
 
-prolibos.iso
-
 /isodir/
+
+!/release/
 
 prolibos.bin
 
