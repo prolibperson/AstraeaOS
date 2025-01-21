@@ -23,9 +23,9 @@ LDFLAGS = -ffreestanding -O2 -nostdlib
 SOURCES = $(shell find $(SRC_DIR) -name '*.c')
 OBJECTS = $(SOURCES:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
-.PHONY: all clean run release run-release
+.PHONY: all clean run release run-release clean-no-iso
 
-all: clean $(ISO_FILE)
+all: clean-no-iso $(ISO_FILE)
 
 $(ISO_FILE): CFLAGS += -DDEBUG_BUILD
 
@@ -49,7 +49,7 @@ $(ISO_FILE): $(OUTPUT_BIN) $(GRUB_CFG)
 	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub/grub.cfg
 	$(GRUB_MKRESCUE) -o $@ $(ISO_DIR)
 
-$(ISO_FILE_RELEASE): clean $(OUTPUT_BIN) $(GRUB_CFG)
+$(ISO_FILE_RELEASE): clean-no-iso $(OUTPUT_BIN) $(GRUB_CFG)
 	mkdir -p $(ISO_DIR)/boot/grub
 	cp $(OUTPUT_BIN) $(ISO_DIR)/boot/prolibos.bin
 	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub/grub.cfg
@@ -63,6 +63,9 @@ run: all
 
 run-release: release
 	$(QEMU) -cdrom $(ISO_FILE_RELEASE)
+
+clean-no-iso:
+	rm -rf $(BUILD_DIR)/* $(ISO_DIR) prolibos.bin
 
 clean:
 	rm -rf $(BUILD_DIR)/* $(ISO_FILE) $(ISO_FILE_RELEASE) $(ISO_DIR) prolibos.bin
