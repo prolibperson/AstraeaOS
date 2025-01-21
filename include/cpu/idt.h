@@ -1,5 +1,4 @@
-#ifndef IDT_H
-#define IDT_H
+#pragma once
 
 #include "global.h"
 
@@ -21,5 +20,3 @@ void idt_set_entry(int num, uint32_t base, uint16_t sel, uint8_t flags);
 void pic_remap();
 bool check_interrupt_conditions();
 bool idt_is_set(int num);
-
-#endif // IDT_H

@@ -1,5 +1,4 @@
-#ifndef LIBC_H
-#define LIBC_H
+#pragma once
 
 #include "global.h"
 
@@ -14,4 +13,3 @@ void *memmove(void *dest, const void *src, size_t n);
 char* strtok(char* str, const char* delimiters);
 char* strchr(const char* str, int c);
 
-#endif // LIBC_H

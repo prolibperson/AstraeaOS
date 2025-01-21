@@ -1,6 +1,4 @@
-#ifndef TERMINAL_H
-#define TERMINAL_H
-
+#pragma once
 #include "global.h"
 
 enum print_type {
@@ -19,4 +17,3 @@ void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);
 void terminal_printf(uint8_t print_type, const char* format, ...);
 
-#endif // TERMINAL_H

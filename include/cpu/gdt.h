@@ -1,5 +1,4 @@
-#ifndef GDT_H
-#define GDT_H
+#pragma once
 
 #include "global.h"
 
@@ -21,5 +20,3 @@ extern struct gdt_entry gdt[3];
 extern struct gdt_ptr gdt_descriptor;
 
 void gdt_init(void);
-
-#endif // GDT_H

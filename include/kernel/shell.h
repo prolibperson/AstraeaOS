@@ -1,5 +1,4 @@
-#ifndef SHELL_H
-#define SHELL_H
+#pragma once
 
 #include <stddef.h>
 
@@ -15,4 +14,3 @@ void shell_run(void);
 void shell_help(void);
 void shell_echo(void);
 
-#endif
