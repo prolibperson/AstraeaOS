@@ -33,9 +33,9 @@ static const char scancode_to_char[128] = {
     0x48,  // Up Arrow
     0,  // Page Up
     '-',
-    0,  // Left Arrow
-    0,  // Center (unused)
-    0,  // Right Arrow
+    0x4B,  // Left Arrow
+    0,  // Center
+    0x4D,  // Right Arrow
     '+',
     0,  // End key
     0x50,  // Down Arrow
@@ -64,9 +64,9 @@ static const char scancode_to_char_shift[128] = {
     0x48,  // Up Arrow
     0,  // Page Up
     '-',
-    0,  // Left Arrow
+    0x4B,  // Left Arrow
     0,  // Center
-    0,  // Right Arrow
+    0x4D,  // Right Arrow
     '+',
     0,  // End key
     0x50,  // Down Arrow
