@@ -3,6 +3,10 @@
 <!-- PROJECT NAME -->
 <br />
 <div align="center">
+  <a href="https://github.com/prolibperson/prolib-os">
+    <img src="image.png" alt="Logo" width="80" height="80">
+  </a>
+
   <h3 align="center">prolibOS</h3>
   <p align="center">
     An x86 32bit operating system.
