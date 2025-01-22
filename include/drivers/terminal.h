@@ -1,6 +1,11 @@
 #pragma once
 #include "global.h"
 
+extern size_t terminal_row;
+extern size_t terminal_column;
+extern uint8_t terminal_color;
+extern uint16_t* terminal_buffer;
+
 enum print_type {
 	PRINT_INIT = 0,
 	PRINT_DEBUG = 1,
@@ -16,4 +21,5 @@ void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);
 void terminal_printf(uint8_t print_type, const char* format, ...);
-
+void terminal_clear_line(size_t row);
+void update_cursor(size_t row, size_t column);

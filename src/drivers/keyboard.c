@@ -29,7 +29,7 @@ static const char scancode_to_char[128] = {
     0,  // Num Lock
     0,  // Scroll Lock
     0,  // Home key
-    0,  // Up Arrow
+    0x48,  // Up Arrow
     0,  // Page Up
     '-',
     0,  // Left Arrow
@@ -37,7 +37,7 @@ static const char scancode_to_char[128] = {
     0,  // Right Arrow
     '+',
     0,  // End key
-    0,  // Down Arrow
+    0x50,  // Down Arrow
     0,  // Page Down
     0,  // Insert key
     0,  // Delete key

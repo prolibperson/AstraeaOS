@@ -68,6 +68,8 @@ void terminal_putchar(char c) {
         if (terminal_row == VGA_HEIGHT) {
             terminal_scroll();
         }
+    } else if (c == '\r') {
+        terminal_column = 0;
     } else if (c == '\b') {
         if (terminal_column > 0) {
             terminal_column--;
