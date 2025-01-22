@@ -2,6 +2,16 @@
 
 toy project for curing boredom
 
+features:
+
+almost fully working shell
+
+working ps/2 keyboard driver
+
+cool looking logging
+
+interrupt support with a fully set up idt and gdt
+
 running:
 
 you need qemu-system-i386
