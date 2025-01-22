@@ -21,10 +21,10 @@ static int history_index = -1;
 void shell_reboot(void) {
     terminal_writestring("Rebooting system...\n");
     asm volatile (
-        "cli\n"                  // Disable interrupts
-        "movb $0xFE, %al\n"      // Load the reboot command into the AL register
-        "outb %al, $0x64\n"      // Send the command to the keyboard controller's command port
-        "hlt\n"                  // Halt the CPU if the reboot fails
+        "cli\n"
+        "movb $0xFE, %al\n" 
+        "outb %al, $0x64\n"
+        "hlt\n"
     );
 }
 
@@ -95,13 +95,21 @@ void shell_run(void) {
                     if (history_index >= 0) {
                         strcpy(input, history[history_count - 1 - history_index]);
                     } else {
+                        clear_input_field(strlen(input));
                         input[0] = '\0';
-                    }
+                        clear_input_field(strlen(input));
+                    }           
                     input_len = strlen(input);
 
                     clear_input_field(input_len);
                     terminal_writestring("\ruser@prolibOS $ ");
                     terminal_writestring(input);
+                } else { 
+                    input[0] = '\0';
+                    input_len = 0;
+
+                    clear_input_field(input_len);
+                    terminal_writestring("\ruser@prolibOS $ ");
                 }
             } else if (input_len < sizeof(input) - 1) {
                 input[input_len++] = c;
