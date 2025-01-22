@@ -10,12 +10,24 @@ static const shell_command_t commands[] = {
     { "help", "List all available commands", shell_help },
     { "echo", "Print text to the terminal",  shell_echo },
     { "clear","Clear the terminal",          shell_clear },
+    { "reboot","Reboots the system",         shell_reboot },
 };
 static const size_t command_count = sizeof(commands) / sizeof(commands[0]);
 
 static char history[HISTORY_SIZE][256];
 static int history_count = 0;
 static int history_index = -1;
+
+void shell_reboot(void) {
+    terminal_writestring("Rebooting system...\n");
+    asm volatile (
+        "cli\n"                  // Disable interrupts
+        "movb $0xFE, %al\n"      // Load the reboot command into the AL register
+        "outb %al, $0x64\n"      // Send the command to the keyboard controller's command port
+        "hlt\n"                  // Halt the CPU if the reboot fails
+    );
+}
+
 
 void shell_clear(void) {
     terminal_clear(); 
