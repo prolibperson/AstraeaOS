@@ -12,7 +12,11 @@ void kernel_main(void) {
     terminal_initialize();
 
     /* welcome home sanitarium */
-    terminal_printf(PRINT_WELCOME, "- Welcome to prolib OS! -\n");
+#ifdef DEBUG_BUILD
+    terminal_printf(PRINT_WELCOME, "- Welcome to prolib OS v1.1.0! (DEBUG BUILD) -\n");
+#else
+    terminal_printf(PRINT_WELCOME, "- Welcome to prolib OS v1.1.0! -\n");
+#endif
     terminal_printf(PRINT_INIT, "Kernel is starting...\n");
 
     /* initialize global descriptor table */
