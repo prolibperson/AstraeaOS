@@ -28,7 +28,6 @@ void shell_reboot(void) {
     );
 }
 
-
 void shell_clear(void) {
     terminal_clear(); 
 }
