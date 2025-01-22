@@ -41,8 +41,6 @@
 
 OS Dev and low level learning project.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- GETTING STARTED -->
 
@@ -55,9 +53,6 @@ _Below is an example of how you can instruct your audience on installing and set
    ```sh
    make
    ```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- USAGE EXAMPLES -->
@@ -75,8 +70,6 @@ _Below is an example of how you can instruct your audience on installing and set
 - (If you dont wanna use QEMU)
 1. Grab an iso in the isobuilds folder and run with whatever VM you want!
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- ROADMAP -->
@@ -92,8 +85,6 @@ _Below is an example of how you can instruct your audience on installing and set
 - [ ] FAT-32 Filesystem
 - [ ] TCP/IP Stack
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTACT -->
@@ -103,13 +94,8 @@ prolib - [@prolibperson](https://twitter.com/prolibperson) - prolib69420@gmail.c
 
 Project Link: [https://github.com/prolibperson/prolib-os](https://github.com/prolibperson/prolib-os)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
 * [OSDev Wiki](https://wiki.osdev.org/)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
