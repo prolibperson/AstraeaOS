@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/prolibperson/prolib-os">
-    <img src="image.png" alt="Logo" width="80" height="80">
+    <img src="image.png" alt="Logo" width="360" height="231">
   </a>
 
   <h3 align="center">prolibOS</h3>
