@@ -13,9 +13,9 @@ ASM_FILES = $(shell find $(SRC_DIR) -name '*.asm')
 ASM_OBJECTS = $(ASM_FILES:$(SRC_DIR)/%.asm=$(BUILD_DIR)/%.o)
 LINKER_SCRIPT = $(SRC_DIR)/boot/linker.ld
 OUTPUT_BIN = $(BUILD_DIR)/prolibos.bin
-ISO_FILE = prolibosBETA.iso
-ISO_FILE_BETA_DIR = beta/prolibosBETA.iso
-ISO_FILE_RELEASE = release/prolibos.iso
+ISO_FILE = isobuilds/prolibos_beta.iso
+ISO_FILE_BETA_DIR = isobuilds/prolibos_beta.iso
+ISO_FILE_RELEASE = isobuilds/prolibos.iso
 GRUB_CFG = $(SRC_DIR)/boot/grub.cfg
 
 CFLAGS = -std=gnu99 -ffreestanding -O2 -Wall -Wextra $(addprefix -I, $(shell find $(INCLUDE_DIR) -type d))
@@ -49,9 +49,6 @@ $(ISO_FILE): $(OUTPUT_BIN) $(GRUB_CFG)
 	cp $(OUTPUT_BIN) $(ISO_DIR)/boot/prolibos.bin
 	cp $(GRUB_CFG) $(ISO_DIR)/boot/grub/grub.cfg
 	$(GRUB_MKRESCUE) -o $@ $(ISO_DIR)
-	#mkdir beta
-	cp prolibosBETA.iso beta/prolibosBETA.iso
-	rm prolibosBETA.iso
 
 $(ISO_FILE_RELEASE): clean-no-iso $(OUTPUT_BIN) $(GRUB_CFG)
 	mkdir -p $(ISO_DIR)/boot/grub
