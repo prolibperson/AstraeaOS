@@ -77,7 +77,7 @@ _Below is an example of how you can instruct your audience on installing and set
 
 - [x] Set up interrupts, an IDT and a GDT
 - [x] Make a cool looking logging system
-- [x] Finish keyboard support
+- [x] Add keyboard support
 - [x] Add Shell
 - [ ] Add Custom Bootloader
 - [ ] VESA Bios Modes and move away from VGA Text Mode
