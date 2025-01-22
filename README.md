@@ -63,14 +63,17 @@ _Below is an example of how you can instruct your audience on installing and set
 <!-- USAGE EXAMPLES -->
 ## Running
 
-- (Using Qemu)
-2. Run make run or make run-release in the root directory of the project
+- (Using QEMU)
+1. Run make run or make run-release in the root directory of the project
    ```sh
    make run
    ```
    ```sh
    make run-release
    ```
+
+- (If you dont wanna use QEMU)
+1. Grab an iso in the isobuilds folder and run with whatever VM you want!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
