@@ -72,4 +72,4 @@ clean-no-iso:
 	rm -rf $(BUILD_DIR)/* $(ISO_DIR) prolibos.bin
 
 clean:
-	rm -rf $(BUILD_DIR)/* $(ISO_FILE) $(ISO_FILE_RELEASE) $(ISO_DIR) prolibos.bin
+	rm -rf $(BUILD_DIR)/* $(ISO_FILE) $(ISO_FILE_RELEASE) $(ISO_DIR) prolibos.bin beta/*
