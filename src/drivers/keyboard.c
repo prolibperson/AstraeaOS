@@ -7,6 +7,8 @@
 #define KEYBOARD_CMD_PORT 0x64
 #define INTERRUPT_ACK 0x20
 
+#define KEY_ALT_1 0x01
+
 #define KEY_BUFFER_SIZE 256
 static char key_buffer[KEY_BUFFER_SIZE];
 static size_t key_buffer_pos = 0;
@@ -86,29 +88,26 @@ void keyboard_handler_c(void) {
             if (scancode == 0x2A || scancode == 0x36) {
                 shift_pressed = false;
             }
-        } else {
-            if (scancode == 0x2A || scancode == 0x36) {
-                shift_pressed = true;
-            }
-            else {
-                char key_char;
-                if (shift_pressed) {
-                    key_char = scancode_to_char_shift[scancode];
-                }
-                else {
-                    key_char = scancode_to_char[scancode];
-                }
+            outb(0x20, INTERRUPT_ACK);
+            return;
+        }
 
-                if (key_char) {
-                    if (key_char == '\b') {
-                        if (key_buffer_pos > 0) {
-                            key_buffer_pos--;
-                            terminal_putchar('\b');
-                        }
-                    } else if (key_buffer_pos < KEY_BUFFER_SIZE - 1) {
-                        key_buffer[key_buffer_pos++] = key_char;
-                    }
+        if (scancode == 0x2A || scancode == 0x36) {
+            shift_pressed = true;
+            outb(0x20, INTERRUPT_ACK);
+            return;
+        }
+
+        char key_char = shift_pressed ? scancode_to_char_shift[scancode]
+                                      : scancode_to_char[scancode];
+        if (key_char) {
+            if (scancode == '\b') {
+                if (key_buffer_pos > 0) {
+                    key_buffer_pos--;
+                    terminal_putchar('\b');
                 }
+            } else if (key_buffer_pos < KEY_BUFFER_SIZE - 1) {
+                key_buffer[key_buffer_pos++] = key_char;
             }
         }
     }

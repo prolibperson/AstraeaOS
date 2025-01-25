@@ -55,7 +55,11 @@ void shell_echo(void) {
 void clear_input_field(size_t input_len) {
     for (size_t i = 0; i < input_len; i++) {
         terminal_putchar('\b');
+    }
+    for (size_t i = 0; i < input_len; i++) {
         terminal_putchar(' ');
+    }
+    for (size_t i = 0; i < input_len; i++) {
         terminal_putchar('\b');
     }
 }
@@ -78,7 +82,9 @@ void shell_run(void) {
                 }
             } else if (c == 0x48) { // up arrow
                 if (history_count > 0) {
-                    if (history_index < history_count - 1) {
+                    if (history_index == -1) {
+                        history_index = 0;
+                    } else if (history_index < history_count - 1) {
                         history_index++;
                     }
                     strcpy(input, history[history_count - 1 - history_index]);
@@ -89,31 +95,30 @@ void shell_run(void) {
                     terminal_writestring(input);
                 }
             } else if (c == 0x50) { // down arrow
-                if (history_index > -1) {
+                if (history_index > 0) {
                     history_index--;
-                    if (history_index >= 0) {
-                        strcpy(input, history[history_count - 1 - history_index]);
-                    } else {
-                        clear_input_field(strlen(input));
-                        input[0] = '\0';
-                        clear_input_field(strlen(input));
-                    }           
+                    strcpy(input, history[history_count - 1 - history_index]);
                     input_len = strlen(input);
 
                     clear_input_field(input_len);
                     terminal_writestring("\ruser@prolibOS $ ");
                     terminal_writestring(input);
-                } else { 
+                } else if (history_index == 0) {
+                    history_index = -1;
                     input[0] = '\0';
-                    input_len = 0;
 
                     clear_input_field(input_len);
+                    input_len = 0;
                     terminal_writestring("\ruser@prolibOS $ ");
                 }
             } else if (input_len < sizeof(input) - 1) {
                 input[input_len++] = c;
                 terminal_putchar(c);
             }
+        }
+        if (input_len == 0) {
+            terminal_writestring("\n");
+            continue;
         }
         input[input_len] = '\0';
 

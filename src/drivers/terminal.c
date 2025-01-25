@@ -80,6 +80,8 @@ void terminal_putchar(char c) {
 
         const size_t index = terminal_row * VGA_WIDTH + terminal_column;
         terminal_buffer[index] = vga_entry(' ', terminal_color);
+
+        update_cursor(terminal_row, terminal_column);
     } else {
         terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
         if (++terminal_column == VGA_WIDTH) {
@@ -164,8 +166,6 @@ void terminal_printf(uint8_t print_type, const char* format, ...) {
         for (size_t i = 0; format[i] != '\0'; i++) {
             terminal_putchar(format[i]);
         }
-
-        //terminal_setcolor(VGA_COLOR_LIGHT_BLUE);
 
         for (int i = 0; i < trailing_dashes; i++) {
             terminal_putchar('-');

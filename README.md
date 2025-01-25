@@ -56,7 +56,7 @@ OS Dev and low level learning project.
 <!-- USAGE EXAMPLES -->
 ## Running
 
-- (Using QEMU)
+- Using QEMU
 1. Run make run or make run-release in the root directory of the project
    ```sh
    make run
@@ -65,7 +65,7 @@ OS Dev and low level learning project.
    make run-release
    ```
 
-- (If you dont wanna use QEMU)
+- If you dont wanna use QEMU
 1. Grab an iso in the isobuilds folder and run with whatever VM you want!
 
 
@@ -77,9 +77,9 @@ OS Dev and low level learning project.
 - [x] Make a cool looking logging system
 - [x] Add keyboard support
 - [x] Add Shell
+- [ ] Move to 64-bit
 - [ ] Add Custom Bootloader
 - [ ] VESA Bios Modes and move away from VGA Text Mode
-- [ ] Move to 64-bit
 - [ ] FAT-32 Filesystem
 - [ ] TCP/IP Stack
 

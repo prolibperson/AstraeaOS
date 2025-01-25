@@ -12,4 +12,4 @@ void itoa(int value, char* buffer, int base);
 void *memmove(void *dest, const void *src, size_t n);
 char* strtok(char* str, const char* delimiters);
 char* strchr(const char* str, int c);
-
+int vsnprintf(char* buffer, size_t size, const char* format, va_list args);

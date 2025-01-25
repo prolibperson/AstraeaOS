@@ -7,15 +7,15 @@
 #include "shell.h"
 
 /* kernel entrypoint */
-void kernel_main(void) {
+void kernel_main(uint32_t multiboot_info_addr) {
     /* init terminal */
     terminal_initialize();
 
     /* welcome home sanitarium */
 #ifdef DEBUG_BUILD
-    terminal_printf(PRINT_WELCOME, "- Welcome to prolib OS v1.1.0! (DEBUG BUILD) -\n");
+    terminal_printf(PRINT_WELCOME, "- Welcome to prolib OS v1.2.0! (DEBUG BUILD) -\n");
 #else
-    terminal_printf(PRINT_WELCOME, "- Welcome to prolib OS v1.1.0! -\n");
+    terminal_printf(PRINT_WELCOME, "- Welcome to prolib OS v1.2.0! -\n");
 #endif
     terminal_printf(PRINT_INIT, "Kernel is starting...\n");
 

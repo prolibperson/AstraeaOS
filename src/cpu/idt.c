@@ -46,6 +46,7 @@ const char *exception_messages[] = {
 };
 
 void exception_handler(int num) {
+    terminal_printf(PRINT_ERROR, "Kernel Panic!\n");
     terminal_printf(PRINT_ERROR, "Exception: %s (IDT %d)\n", exception_messages[num], num);
     while (1) asm volatile ("hlt");
 }
@@ -65,14 +66,14 @@ void dummy_handler(int irq) {
 }
 
 void pic_remap() {
-    outb(0x20, 0x11); // Master PIC - ICW1
-    outb(0xA0, 0x11); // Slave PIC - ICW1
-    outb(0x21, 0x20); // Master PIC - ICW2 (offset 0x20)
-    outb(0xA1, 0x28); // Slave PIC - ICW2 (offset 0x28)
-    outb(0x21, 0x04); // Master PIC - ICW3 (IRQ2 -> Slave)
-    outb(0xA1, 0x02); // Slave PIC - ICW3 (cascade identity)
-    outb(0x21, 0x01); // Master PIC - ICW4
-    outb(0xA1, 0x01); // Slave PIC - ICW4
+    outb(0x20, 0x11);
+    outb(0xA0, 0x11);
+    outb(0x21, 0x20);
+    outb(0xA1, 0x28);
+    outb(0x21, 0x04);
+    outb(0xA1, 0x02);
+    outb(0x21, 0x01);
+    outb(0xA1, 0x01);
 
     outb(0x21, 0xFD);
     outb(0xA1, 0xFF);
@@ -89,7 +90,6 @@ void idt_set_entry(int num, uint32_t base, uint16_t sel, uint8_t flags) {
         return;
     }
 
-    //terminal_printf(PRINT_DEBUG, "Setting IDT entry %d: base=0x%x, sel=0x%x, flags=0x%x\n", num, base, sel, flags);
     idt[num].base_low = base & 0xFFFF;
     idt[num].base_high = (base >> 16) & 0xFFFF;
     idt[num].sel = sel;
