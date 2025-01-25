@@ -13,8 +13,6 @@
   </p>
 </div>
 
-
-
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
@@ -77,7 +75,7 @@ OS Dev and low level learning project.
 - [x] Make a cool looking logging system
 - [x] Add keyboard support
 - [x] Add Shell
-- [ ] Move to 64-bit
+- [-] Move to 64-bit | In progress hehe
 - [ ] Add Custom Bootloader
 - [ ] VESA Bios Modes and move away from VGA Text Mode
 - [ ] FAT-32 Filesystem
