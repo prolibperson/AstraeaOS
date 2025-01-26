@@ -75,7 +75,7 @@ OS Dev and low level learning project.
 - [x] Make a cool looking logging system
 - [x] Add keyboard support
 - [x] Add Shell
-- [-] Move to 64-bit | In progress hehe
+- [ ] Move to 64-bit | In progress
 - [ ] Add Custom Bootloader
 - [ ] VESA Bios Modes and move away from VGA Text Mode
 - [ ] FAT-32 Filesystem
