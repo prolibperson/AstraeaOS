@@ -1,7 +1,7 @@
-AS = x86_64-elf-as
-CC = x86_64-elf-gcc
+AS = i686-elf-as
+CC = i686-elf-gcc
 GRUB_MKRESCUE = grub-mkrescue
-QEMU = qemu-system-x86_64
+QEMU = qemu-system-i686
 NASM = nasm
 
 SRC_DIR = src
@@ -35,7 +35,7 @@ $(BOOT_FILE): $(SRC_DIR)/boot/boot.s
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.asm
 	@mkdir -p $(dir $@)
-	$(NASM) -f elf64 $< -o $@
+	$(NASM) -f elf32 $< -o $@
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)

@@ -20,52 +20,12 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
-    mov $stack_top, %esp
+      mov $stack_top, %esp
 
-    cli
-    mov %cr0, %eax
-    or $0x1, %eax
-    mov %eax, %cr0
-    jmp $8, $.protected_mode
+      call kernel_main
 
-.protected_mode:
-    mov $0x10, %ax
-    mov %ax, %ds
-    mov %ax, %es
-    mov %ax, %fs
-    mov %ax, %gs
-    mov %ax, %ss
-
-    mov $0xC0000080, %ecx
-    rdmsr
-    or $(1 << 8), %eax
-    wrmsr
-
-    mov %cr4, %eax
-    or $(1 << 5), %eax
-    mov %eax, %cr4
-
-    mov %cr3, %eax
-    mov %eax, %cr3
-
-    mov %cr0, %eax
-    or $(1 << 31), %eax
-    mov %eax, %cr0
-
-    jmp $0x28, $.long_mode
-
-.long_mode:
-    mov $0x30, %ax
-    mov %ax, %ds
-    mov %ax, %es
-    mov %ax, %fs
-    mov %ax, %gs
-    mov %ax, %ss
-
-    call kernel_main
-
-1:  cli
-    hlt
-    jmp 1b
+      cli
+1:    hlt
+      jmp 1b
 
 .size _start, . - _start
