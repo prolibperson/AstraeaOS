@@ -8,7 +8,7 @@ struct idt_ptr idt_descriptor;
 extern void idt_load(void);
 extern void exception_wrappers(void);
 
-#define WRAPPER_SIZE 10
+#define WRAPPER_SIZE 16
 
 const char *exception_messages[] = {
     "Division by Zero",
@@ -45,15 +45,15 @@ const char *exception_messages[] = {
     "Reserved"
 };
 
-void exception_handler(int num) {
-    terminal_printf(PRINT_ERROR, "Kernel Panic!\n");
-    terminal_printf(PRINT_ERROR, "Exception: %s (IDT %d)\n", exception_messages[num], num);
+void exception_handler(int num, uint64_t error_code) {
+    terminal_printf(PRINT_ERROR, "\nKernel Panic!\n");
+    terminal_printf(PRINT_ERROR, "Exception: %s (IDT %d, Error Code: 0x%lx)\n", exception_messages[num], num, error_code);
     while (1) asm volatile ("hlt");
 }
 
 void register_exception_handlers() {
     for (int i = 0; i < 32; i++) {
-        idt_set_entry(i, (uint32_t)(exception_wrappers + i * WRAPPER_SIZE), 0x08, 0x8E);
+        idt_set_entry(i, (uint64_t)(exception_wrappers + i * WRAPPER_SIZE), 0x08, 0x8E);
     }
 }
 
@@ -79,12 +79,11 @@ void pic_remap() {
     outb(0xA1, 0xFF);
 }
 
-
 bool idt_is_set(int num) {
     return idt[num].base_low != 0 || idt[num].base_high != 0 || idt[num].flags != 0;
 }
 
-void idt_set_entry(int num, uint32_t base, uint16_t sel, uint8_t flags) {
+void idt_set_entry(int num, uint64_t base, uint16_t sel, uint8_t flags) {
     if (num < 0 || num >= 256) {
         terminal_printf(PRINT_ERROR, "Invalid IDT entry index: %d\n", num);
         return;
@@ -92,9 +91,11 @@ void idt_set_entry(int num, uint32_t base, uint16_t sel, uint8_t flags) {
 
     idt[num].base_low = base & 0xFFFF;
     idt[num].base_high = (base >> 16) & 0xFFFF;
+    idt[num].base_upper = (base >> 32) & 0xFFFFFFFF;
     idt[num].sel = sel;
     idt[num].always0 = 0;
     idt[num].flags = flags;
+    idt[num].reserved = 0;
 }
 
 #define IDT_FLAG_PRESENT 0x80
@@ -103,18 +104,20 @@ void idt_set_entry(int num, uint32_t base, uint16_t sel, uint8_t flags) {
 
 void idt_init(void) {
     idt_descriptor.limit = sizeof(idt) - 1;
-    idt_descriptor.base = (uint32_t)&idt;
+    idt_descriptor.base = (uint64_t)&idt;
 
     for (int i = 0; i < 256; i++) {
         idt_set_entry(i, 0, 0, 0);
     }
 
+    register_exception_handlers();
+
     for (int i = 32; i < 48; i++) {
-        if(i != 33)
-            idt_set_entry(i, (uint32_t)dummy_handler, 0x08, IDT_FLAG_PRESENT | IDT_FLAG_RING0 | IDT_FLAG_INT_GATE);
+        if (i != 33)
+            idt_set_entry(i, (uint64_t)dummy_handler, 0x08, IDT_FLAG_PRESENT | IDT_FLAG_RING0 | IDT_FLAG_INT_GATE);
     }
 
-    register_exception_handlers();
+    pic_remap();
 
     idt_load();
 }

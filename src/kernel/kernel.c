@@ -13,9 +13,9 @@ void kernel_main(uint32_t multiboot_info_addr) {
 
     /* welcome home sanitarium */
 #ifdef DEBUG_BUILD
-    terminal_printf(PRINT_WELCOME, "- Welcome to prolib OS v1.2.0! (DEBUG BUILD) -\n");
+    terminal_printf(PRINT_WELCOME, "- Welcome to prolibOS x86_64 v1.3.0! (BETA BUILD) -\n");
 #else
-    terminal_printf(PRINT_WELCOME, "- Welcome to prolib OS v1.2.0! -\n");
+    terminal_printf(PRINT_WELCOME, "- Welcome to prolibOS x86_64 v1.3.0! (RELEASE BUILD) -\n");
 #endif
     terminal_printf(PRINT_INIT, "Kernel is starting...\n");
 

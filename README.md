@@ -9,7 +9,7 @@
 
   <h3 align="center">prolibOS</h3>
   <p align="center">
-    An i386 (soon to be x86_64) operating system.
+    An x86_64 operating system.
   </p>
 </div>
 
@@ -44,7 +44,7 @@ OS Dev and low level learning project.
 
 ### Building
 
-1. Set up a GCC Cross compiler [https://wiki.osdev.org/GCC_Cross-Compiler](https://wiki.osdev.org/GCC_Cross-Compiler)
+1. Set up an x86_64 Cross compiler [https://wiki.osdev.org/GCC_Cross-Compiler](https://wiki.osdev.org/GCC_Cross-Compiler)
 2. Run make in the root directory of the project
    ```sh
    make
@@ -75,9 +75,9 @@ OS Dev and low level learning project.
 - [x] Make a cool looking logging system
 - [x] Add keyboard support
 - [x] Add Shell
-- [ ] Move to 64-bit | In progress
-- [ ] Add Custom Bootloader
+- [x] Move to 64-bit
 - [ ] VESA Bios Modes and move away from VGA Text Mode
+- [ ] Add Custom Bootloader
 - [ ] FAT-32 Filesystem
 - [ ] TCP/IP Stack
 
@@ -95,3 +95,4 @@ Project Link: [https://github.com/prolibperson/prolib-os](https://github.com/pro
 ## Acknowledgments
 
 * [OSDev Wiki](https://wiki.osdev.org/)
+* [Davis](https://github.com/zkxjzmswkwl/davis/)
