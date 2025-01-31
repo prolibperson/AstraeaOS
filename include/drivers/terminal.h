@@ -23,4 +23,3 @@ void terminal_writestring(const char* data);
 void terminal_printf(uint8_t print_type, const char* format, ...);
 void terminal_clear_line(size_t row);
 void update_cursor(size_t row, size_t column);
-void terminal_print_centered_rainbow(const char* text);
