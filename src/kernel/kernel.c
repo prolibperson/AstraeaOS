@@ -12,17 +12,6 @@ void kernel_main(uint32_t multiboot_info_addr) {
     /* init terminal */
     terminal_initialize();
 
-    /* welcome home sanitarium */
-    terminal_writestring("                                  _ _ _        ____   _____ \n");
-    terminal_writestring("                                 | (_) |      / __ \\ / ____|\n");
-    terminal_writestring("                  _ __  _ __ ___ | |_| |__   | |  | | (___  \n");
-    terminal_writestring("                 | '_ \\| '__/ _ \\| | | '_ \\  | |  | |\\___ \\ \n");
-    terminal_writestring("                 | |_) | | | (_) | | | |_) | | |__| |____) | \n");
-    terminal_writestring("                 | .__/|_|  \\___/|_|_|_.__/   \\____/|_____/  \n");
-    terminal_writestring("                 | |                                         \n");
-    terminal_writestring("                 |_|                                        \n\n");
-    terminal_writestring("\n        Welcome to prolibOS! You can run 'help' for a list of commands.\n");
-
 #ifdef DEBUG_BUILD
     terminal_printf(PRINT_DEBUG, "Beta Build!\n");
 #endif
@@ -87,6 +76,18 @@ void kernel_main(uint32_t multiboot_info_addr) {
 #ifdef DEBUG_BUILD
     terminal_printf(PRINT_INIT, "Starting shell\n");
 #endif
+
+    /* welcome home sanitarium (yes i know im lazy) */
+    terminal_clear();
+    terminal_writestring("                                  _ _ _        ____   _____ \n");
+    terminal_writestring("                                 | (_) |      / __ \\ / ____|\n");
+    terminal_writestring("                  _ __  _ __ ___ | |_| |__   | |  | | (___  \n");
+    terminal_writestring("                 | '_ \\| '__/ _ \\| | | '_ \\  | |  | |\\___ \\ \n");
+    terminal_writestring("                 | |_) | | | (_) | | | |_) | | |__| |____) | \n");
+    terminal_writestring("                 | .__/|_|  \\___/|_|_|_.__/   \\____/|_____/  \n");
+    terminal_writestring("                 | |                                         \n");
+    terminal_writestring("                 |_|                                        \n\n");
+    terminal_writestring("\n        Welcome to prolibOS! You can run 'help' for a list of commands.\n");
 
     /* start shell */
     shell_run();
