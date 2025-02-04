@@ -8,8 +8,8 @@ struct idt_entry {
     uint8_t  always0;
     uint8_t  flags;
     uint16_t base_high;
-    uint32_t base_upper;  // Upper 32 bits of the handler's address
-    uint32_t reserved;    // Reserved (must be 0)
+    uint32_t base_upper;
+    uint32_t reserved;
 } __attribute__((packed));
 
 struct idt_ptr {

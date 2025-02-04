@@ -16,7 +16,7 @@ OUTPUT_BIN = $(BUILD_DIR)/prolibos.bin
 ISO_FILE = isobuilds/prolibos_beta.iso
 ISO_FILE_RELEASE = isobuilds/prolibos.iso
 
-CFLAGS = -std=gnu99 -ffreestanding -O2 -Wall -Wextra $(addprefix -I, $(shell find $(INCLUDE_DIR) -type d))
+CFLAGS = -g -std=gnu99 -ffreestanding -O2 -Wall -Wextra $(addprefix -I, $(shell find $(INCLUDE_DIR) -type d))
 LDFLAGS = -ffreestanding -O2 -nostdlib
 
 SOURCES = $(shell find $(SRC_DIR) -name '*.c')
@@ -57,6 +57,7 @@ $(ISO_FILE_RELEASE): $(OUTPUT_BIN)
 	echo 'set default=0' >> $(ISO_DIR)/boot/grub/grub.cfg
 	echo 'menuentry "prolibOS" {' >> $(ISO_DIR)/boot/grub/grub.cfg
 	echo '    multiboot2 /boot/prolibos.bin' >> $(ISO_DIR)/boot/grub/grub.cfg
+	echo '    set gfxpayload=1280x960x32' >> $(ISO_DIR)/boot/grub/grub.cfg
 	echo '    boot' >> $(ISO_DIR)/boot/grub/grub.cfg
 	echo '}' >> $(ISO_DIR)/boot/grub/grub.cfg
 	grub-mkrescue -o $@ $(ISO_DIR)

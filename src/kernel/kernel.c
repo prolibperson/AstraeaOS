@@ -6,94 +6,94 @@
 #include "libc.h"
 #include "shell.h"
 #include "vga.h"
+#include "multiboot2.h"
 
-/* kernel entrypoint */
-void kernel_main(uint32_t multiboot_info_addr) {
+void halt_cpu() {
+    while(1)
+        asm volatile("hlt");
+}
+
+void init_idt_gdt() {
+    gdt_init();
+    idt_init();
+    pic_remap();
+}
+
+void init_kernel_shell() {
     /* init terminal */
     terminal_initialize();
 
-#ifdef DEBUG_BUILD
-    terminal_printf(PRINT_DEBUG, "Beta Build!\n");
-#endif
+    tprintf("Starting Boot Process...\n\n");
 
 #ifdef DEBUG_BUILD
-    terminal_printf(PRINT_INIT, "Kernel is starting...\n");
+    tprintfp(PRINT_DEBUG, "Beta Build!\n");
 #endif
+
+    tprintfp(PRINT_INIT, "Kernel is starting...\n");
 
     /* initialize global descriptor table */
     gdt_init();
-#ifdef DEBUG_BUILD
-    terminal_printf(PRINT_LOGGING, "GDT Initialized\n");
-    #endif
+    tprintfp(PRINT_LOGGING, "GDT Initialized\n");
 
     /* initialize interrupt descriptor table */
     idt_init();
-#ifdef DEBUG_BUILD
-    terminal_printf(PRINT_LOGGING, "IDT Initialized\n");
-#endif
+    tprintfp(PRINT_LOGGING, "IDT Initialized\n");
 
     /* initialize keyboard driver / handler */
     keyboard_init();
-#ifdef DEBUG_BUILD
-    terminal_printf(PRINT_LOGGING, "Keyboard initialized\n");
-#endif
+    tprintfp(PRINT_LOGGING, "Keyboard initialized\n");
 
     /* (debug) check pic masks */
     uint8_t master_mask = inb(0x21);
     uint8_t slave_mask = inb(0xA1);
 #ifdef DEBUG_BUILD
-    terminal_printf(PRINT_DEBUG, "PIC Masks: Master=0x%x, Slave=0x%x\n", master_mask, slave_mask);
+    tprintfp(PRINT_DEBUG, "PIC Masks: Master=0x%x, Slave=0x%x\n", master_mask, slave_mask);
 #endif
 
     /* remap pic */
     pic_remap();
-#ifdef DEBUG_BUILD
-    terminal_printf(PRINT_LOGGING, "PIC Remapped\n");
-#endif
+    tprintfp(PRINT_LOGGING, "PIC Remapped\n");
 
     /* (debug) check pic masks again */
     master_mask = inb(0x21);
     slave_mask = inb(0xA1);
 #ifdef DEBUG_BUILD
-    terminal_printf(PRINT_DEBUG, "PIC Masks: Master=0x%x, Slave=0x%x\n", master_mask, slave_mask);
+    tprintfp(PRINT_DEBUG, "PIC Masks: Master=0x%x, Slave=0x%x\n", master_mask, slave_mask);
 #endif
 
     /* enable interrupts */
-#ifdef DEBUG_BUILD
-    terminal_printf(PRINT_INIT, "Enabling interrupts...\n");
-#endif
+    tprintfp(PRINT_INIT, "Enabling interrupts...\n");
     outb(0x21, inb(0x21) & ~0x02);
     asm volatile ("sti");
-#ifdef DEBUG_BUILD
-    terminal_printf(PRINT_LOGGING, "Interrupts enabled\n");
-#endif
+    tprintfp(PRINT_LOGGING, "Interrupts enabled\n");
     outb(0x21, inb(0x21) & ~0x02);
-#ifdef DEBUG_BUILD
-    terminal_printf(PRINT_LOGGING, "Keyboard interrupts unmasked\n");
-#endif
+    tprintfp(PRINT_LOGGING, "Keyboard interrupts unmasked\n");
 
     /* hallo */
-#ifdef DEBUG_BUILD
-    terminal_printf(PRINT_INIT, "Starting shell\n");
-#endif
+    tprintfp(PRINT_INIT, "Starting shell\n");
 
     /* welcome home sanitarium (yes i know im lazy) */
     terminal_clear();
-    terminal_writestring("                                  _ _ _        ____   _____ \n");
-    terminal_writestring("                                 | (_) |      / __ \\ / ____|\n");
-    terminal_writestring("                  _ __  _ __ ___ | |_| |__   | |  | | (___  \n");
-    terminal_writestring("                 | '_ \\| '__/ _ \\| | | '_ \\  | |  | |\\___ \\ \n");
-    terminal_writestring("                 | |_) | | | (_) | | | |_) | | |__| |____) | \n");
-    terminal_writestring("                 | .__/|_|  \\___/|_|_|_.__/   \\____/|_____/  \n");
-    terminal_writestring("                 | |                                         \n");
-    terminal_writestring("                 |_|                                        \n\n");
-    terminal_writestring("\n        Welcome to prolibOS! You can run 'help' for a list of commands.\n");
+    tprintf("                                  _ _ _        ____   _____ \n");
+    tprintf("                                 | (_) |      / __ \\ / ____|\n");
+    tprintf("                  _ __  _ __ ___ | |_| |__   | |  | | (___  \n");
+    tprintf("                 | '_ \\| '__/ _ \\| | | '_ \\  | |  | |\\___ \\ \n");
+    tprintf("                 | |_) | | | (_) | | | |_) | | |__| |____) | \n");
+    tprintf("                 | .__/|_|  \\___/|_|_|_.__/   \\____/|_____/  \n");
+    tprintf("                 | |                                         \n");
+    tprintf("                 |_|                                        \n\n");
+    tprintf("\n        Welcome to prolibOS! You can run 'help' for a list of commands.\n");
 
     /* start shell */
     shell_run();
 
     /* halt cpu if shell isnt running */
-    while (1) {
-        asm volatile ("hlt");
-    }
+    halt_cpu();
 }
+
+// Kernel main function
+void kernel_main(uint64_t multiboot_info_addr) {
+    init_kernel_shell();
+    halt_cpu();
+}
+

@@ -105,7 +105,53 @@ void terminal_writestring(const char* data) {
     terminal_write(data, strlen(data));
 }
 
-void terminal_printf(uint8_t print_type, const char* format, ...) {
+void terminal_printf(const char* format, ...) {
+    va_list args;
+    va_start(args, format);
+
+    for (size_t i = 0; format[i] != '\0'; i++) {
+        if (format[i] == '%') {
+            i++; // move past "%"
+            switch (format[i]) {
+                case 'c': { // character
+                    char c = (char)va_arg(args, int);
+                    terminal_putchar(c);
+                    break;
+                }
+                case 's': { // string
+                    const char* s = va_arg(args, const char*);
+                    terminal_write(s, strlen(s));
+                    break;
+                }
+                case 'd': { // decimal integer
+                    int value = va_arg(args, int);
+                    char buffer[12];
+                    itoa(value, buffer, 10);
+                    terminal_write(buffer, strlen(buffer));
+                    break;
+                }
+                case 'x': { // hexadecimal integer
+                    int value = va_arg(args, int);
+                    char buffer[9];
+                    itoa(value, buffer, 16);
+                    terminal_write(buffer, strlen(buffer));
+                    break;
+                }
+                default: { // unhandled specifier
+                    terminal_putchar('%');
+                    terminal_putchar(format[i]);
+                    break;
+                }
+            }
+        } else {
+            terminal_putchar(format[i]);
+        }
+    }
+
+    va_end(args);
+}
+
+void terminal_printf_prefix(uint8_t print_type, const char* format, ...) {
     va_list args;
     va_start(args, format);
 

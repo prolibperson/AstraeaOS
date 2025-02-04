@@ -1,6 +1,9 @@
 #pragma once
 #include "global.h"
 
+#define tprintfp terminal_printf_prefix
+#define tprintf terminal_printf
+
 extern size_t terminal_row;
 extern size_t terminal_column;
 extern uint8_t terminal_color;
@@ -20,6 +23,7 @@ void terminal_setcolor(uint8_t color);
 void terminal_putchar(char c);
 void terminal_write(const char* data, size_t size);
 void terminal_writestring(const char* data);
-void terminal_printf(uint8_t print_type, const char* format, ...);
+void terminal_printf(const char* format, ...);
+void terminal_printf_prefix(uint8_t print_type, const char* format, ...);
 void terminal_clear_line(size_t row);
 void update_cursor(size_t row, size_t column);

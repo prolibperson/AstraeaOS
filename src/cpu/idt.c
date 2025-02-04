@@ -46,8 +46,8 @@ const char *exception_messages[] = {
 };
 
 void exception_handler(int num, uint64_t error_code) {
-    terminal_printf(PRINT_ERROR, "\nKernel Panic!\n");
-    terminal_printf(PRINT_ERROR, "Exception: %s (IDT %d, Error Code: 0x%lx)\n", exception_messages[num], num, error_code);
+    tprintfp(PRINT_ERROR, "\nKernel Panic!\n");
+    tprintfp(PRINT_ERROR, "Exception: %s (IDT %d, Error Code: 0x%lx)\n", exception_messages[num], num, error_code);
     while (1) asm volatile ("hlt");
 }
 
@@ -58,7 +58,7 @@ void register_exception_handlers() {
 }
 
 void dummy_handler(int irq) {
-    terminal_printf(PRINT_DEBUG, "IRQ %d received.\n", irq);
+    tprintfp(PRINT_DEBUG, "IRQ %d received.\n", irq);
     outb(0x20, 0x20);
     if (irq >= 8) {
         outb(0xA0, 0x20);
@@ -85,7 +85,7 @@ bool idt_is_set(int num) {
 
 void idt_set_entry(int num, uint64_t base, uint16_t sel, uint8_t flags) {
     if (num < 0 || num >= 256) {
-        terminal_printf(PRINT_ERROR, "Invalid IDT entry index: %d\n", num);
+        tprintfp(PRINT_ERROR, "Invalid IDT entry index: %d\n", num);
         return;
     }
 
