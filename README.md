@@ -77,8 +77,8 @@ OS Dev and low level learning project.
 - [x] Add Shell
 - [x] Move to 64-bit
 - [ ] VESA Bios Modes and move away from VGA Text Mode
-- [ ] Add Custom Bootloader
 - [ ] FAT-32 Filesystem
+- [ ] Add Custom Bootloader
 - [ ] TCP/IP Stack
 
 
