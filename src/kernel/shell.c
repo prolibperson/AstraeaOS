@@ -10,7 +10,7 @@ static const shell_command_t commands[] = {
     { "help", "List all available commands", shell_help },
     { "echo", "Print text to the terminal",  shell_echo },
     { "clear","Clear the terminal",          shell_clear },
-    { "reboot","Reboots the system",         shell_reboot },
+    { "reboot","Reboot the system",         shell_reboot },
 };
 static const size_t command_count = sizeof(commands) / sizeof(commands[0]);
 
@@ -62,6 +62,15 @@ void clear_input_field(size_t input_len) {
     for (size_t i = 0; i < input_len; i++) {
         terminal_putchar('\b');
     }
+}
+
+int is_input_only_spaces(const char* input, size_t input_len) {
+    for (size_t i = 0; i < input_len; i++) {
+        if (input[i] != ' ') {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 void shell_run(void) {
@@ -116,7 +125,7 @@ void shell_run(void) {
                 terminal_putchar(c);
             }
         }
-        if (input_len == 0) {
+        if (input_len == 0 || is_input_only_spaces(input, input_len)) {
             terminal_writestring("\n");
             continue;
         }
