@@ -19,10 +19,7 @@ void init_idt_gdt() {
     pic_remap();
 }
 
-void init_kernel_shell() {
-    /* init terminal */
-    terminal_initialize();
-
+void boot_process() {
     tprintf("Starting Boot Process...\n\n");
 
 #ifdef DEBUG_BUILD
@@ -71,6 +68,14 @@ void init_kernel_shell() {
 
     /* hallo */
     tprintfp(PRINT_INIT, "Starting shell\n");
+}
+
+void init_kernel_shell() {
+    /* init terminal */
+    terminal_initialize();
+
+    /* boot process */
+    boot_process()
 
     /* welcome home sanitarium (yes i know im lazy) */
     terminal_clear();
