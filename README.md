@@ -61,7 +61,7 @@ OS Dev and low level learning project.
 - Using QEMU
 1. Run "make run-debug" or "make run-release" in the root directory of the project
    ```sh
-   make run
+   make run-debug
    ```
    ```sh
    make run-release
