@@ -45,7 +45,7 @@ OS Dev and low level learning project.
 ### Building
 
 1. Set up an x86_64 Cross compiler [https://wiki.osdev.org/GCC_Cross-Compiler](https://wiki.osdev.org/GCC_Cross-Compiler)
-2. Run make release or make debug in the root directory of the project
+2. Run 'make release' or 'make debug' in the root directory of the project
    ```sh
    make release
    ```
@@ -59,7 +59,7 @@ OS Dev and low level learning project.
 ## Running
 
 - Using QEMU
-1. Run make run or make run-release in the root directory of the project
+1. Run "make run-debug" or "make run-release" in the root directory of the project
    ```sh
    make run
    ```
