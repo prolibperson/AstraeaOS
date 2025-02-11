@@ -99,3 +99,7 @@ Project Link: [https://github.com/prolibperson/prolib-os](https://github.com/pro
 ## Acknowledgments
 
 * [OSDev Wiki](https://wiki.osdev.org/)
+
+## License
+
+This project is released under the [GNU GENERAL PUBLIC LICENSE v3 (GPLv3)](https://github.com/prolibperson/prolib-os/blob/main/LICENSE)
