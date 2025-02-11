@@ -102,4 +102,4 @@ Project Link: [https://github.com/prolibperson/prolib-os](https://github.com/pro
 
 ## License
 
-This project is released under the [GNU GENERAL PUBLIC LICENSE v3 (GPLv3)](https://github.com/prolibperson/prolib-os/blob/main/LICENSE)
+This project is licensed under the [GNU GENERAL PUBLIC LICENSE v3 (GPLv3)](https://github.com/prolibperson/prolib-os/blob/main/LICENSE)
