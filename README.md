@@ -99,4 +99,3 @@ Project Link: [https://github.com/prolibperson/prolib-os](https://github.com/pro
 ## Acknowledgments
 
 * [OSDev Wiki](https://wiki.osdev.org/)
-* [Davis](https://github.com/zkxjzmswkwl/davis/)
