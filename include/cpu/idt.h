@@ -1,6 +1,6 @@
 #pragma once
 
-#include "global.h"
+#include "std.h"
 
 struct idt_entry {
     uint16_t base_low;

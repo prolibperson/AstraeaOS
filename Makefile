@@ -1,78 +1,107 @@
-AS = x86_64-elf-as
-CC = x86_64-elf-gcc
-GRUB_MKRESCUE = grub-mkrescue
-QEMU = qemu-system-x86_64
-NASM = nasm
+# nuke built-in rules and variables
+MAKEFLAGS += -rR
+.SUFFIXES:
 
-SRC_DIR = src
-BUILD_DIR = build
-INCLUDE_DIR = include
-ISO_DIR = isodir
-BOOT_FILE = $(BUILD_DIR)/boot.o
-ASM_FILES = $(shell find $(SRC_DIR) -name '*.asm')
-ASM_OBJECTS = $(ASM_FILES:$(SRC_DIR)/%.asm=$(BUILD_DIR)/%.o)
-LINKER_SCRIPT = $(SRC_DIR)/boot/linker.ld
-OUTPUT_BIN = $(BUILD_DIR)/prolibos.bin
-ISO_FILE = isobuilds/prolibos_beta.iso
-ISO_FILE_RELEASE = isobuilds/prolibos.iso
+# toolchain
+CC := x86_64-elf-gcc
+AS := nasm  # Use nasm for assembly files
+LD := x86_64-elf-ld
+AR := x86_64-elf-ar
 
-CFLAGS = -g -std=gnu99 -ffreestanding -O2 -Wall -Wextra $(addprefix -I, $(shell find $(INCLUDE_DIR) -type d))
-LDFLAGS = -ffreestanding -O2 -nostdlib
+# qemu flags
+QEMUFLAGS := -m 2G
+IMAGE_NAME := prolibOS
 
-SOURCES = $(shell find $(SRC_DIR) -name '*.c')
-OBJECTS = $(SOURCES:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
+# compiler and linker flags
+CFLAGS := -m64 -mcmodel=kernel -ffreestanding -fno-stack-protector -fno-stack-check -nostdlib -O2 -g -Wall -Wextra
+LDFLAGS := -T linker.ld -nostdlib -static
 
-.PHONY: all clean run release run-release clean-no-iso
+# source and asm files
+KERNEL_SRC := $(shell find src -type f -name "*.c")
+KERNEL_ASM := $(shell find src -type f -name "*.asm")
+KERNEL_OBJ := $(patsubst src/%, bin/%, $(KERNEL_SRC:.c=.o) $(KERNEL_ASM:.asm=.o))
 
-all: clean-no-iso $(ISO_FILE)
+# include dirs
+INCLUDE_DIRS := $(shell find include -type d)
+INCLUDES := $(foreach dir, $(INCLUDE_DIRS), -I$(dir))
 
-$(ISO_FILE): CFLAGS += -DDEBUG_BUILD
+# ensure bin and isobuilds directories
+$(shell mkdir -p bin isobuilds)
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.asm
+.PHONY: all run-debug run-release debug release clean
+
+# default target
+all: release
+
+# compile C files
+bin/%.o: src/%.c
+	@mkdir -p $(dir $@)  
+	$(CC) $(CFLAGS) $(INCLUDES) $(EXTRA_CFLAGS) -c $< -o $@
+
+# compile assembly files with nasm
+bin/%.o: src/%.asm
 	@mkdir -p $(dir $@)
-	$(NASM) -f elf64 $< -o $@
+	$(AS) -f elf64 -o $@ $<
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(dir $@)
-	$(CC) -c $< -o $@ $(CFLAGS)
+# link kernel
+bin/kernel.elf: $(KERNEL_OBJ)
+	mkdir -p bin
+	$(LD) $(LDFLAGS) -o $@ $^
 
-$(OUTPUT_BIN): $(OBJECTS) $(ASM_OBJECTS) $(LINKER_SCRIPT)
-	$(CC) -T $(LINKER_SCRIPT) -o $(OUTPUT_BIN) $(LDFLAGS) $(OBJECTS) $(ASM_OBJECTS) -lgcc
+# build debug iso
+isobuilds/prolibOS_debug.iso: EXTRA_CFLAGS := -DDEBUG_BUILD
+isobuilds/prolibOS_debug.iso: bin/kernel.elf limine/limine
+	rm -rf isodirs
+	mkdir -p isodirs/boot/limine
+	cp bin/kernel.elf isodirs/boot/
+	cp limine.conf isodirs/boot/limine/
+	cp limine/limine-bios.sys limine/limine-bios-cd.bin limine/limine-uefi-cd.bin isodirs/boot/limine/
+	mkdir -p isodirs/EFI/BOOT
+	cp limine/BOOTX64.EFI isodirs/EFI/BOOT/
+	xorriso -as mkisofs -R -J -b boot/limine/limine-bios-cd.bin -no-emul-boot \
+		-boot-load-size 4 -boot-info-table -hfsplus -apm-block-size 2048 \
+		--efi-boot boot/limine/limine-uefi-cd.bin -efi-boot-part --efi-boot-image \
+		--protective-msdos-label isodirs -o isobuilds/prolibOS_debug.iso
+	./limine/limine bios-install isobuilds/prolibOS_debug.iso
+	rm -rf isodirs
 
-$(ISO_FILE): $(OUTPUT_BIN)
-	mkdir -p $(ISO_DIR)/boot/grub
-	cp $(OUTPUT_BIN) $(ISO_DIR)/boot/prolibos.bin
-	echo 'set timeout=0' > $(ISO_DIR)/boot/grub/grub.cfg
-	echo 'set default=0' >> $(ISO_DIR)/boot/grub/grub.cfg
-	echo 'menuentry "prolibOS" {' >> $(ISO_DIR)/boot/grub/grub.cfg
-	echo '    multiboot2 /boot/prolibos.bin' >> $(ISO_DIR)/boot/grub/grub.cfg
-	echo '    boot' >> $(ISO_DIR)/boot/grub/grub.cfg
-	echo '}' >> $(ISO_DIR)/boot/grub/grub.cfg
-	grub-mkrescue -o $@ $(ISO_DIR)
+# build release iso
+isobuilds/prolibOS.iso: bin/kernel.elf limine/limine
+	rm -rf isodirs
+	mkdir -p isodirs/boot/limine
+	cp bin/kernel.elf isodirs/boot/
+	cp limine.conf isodirs/boot/limine/
+	cp limine/limine-bios.sys limine/limine-bios-cd.bin limine/limine-uefi-cd.bin isodirs/boot/limine/
+	mkdir -p isodirs/EFI/BOOT
+	cp limine/BOOTX64.EFI isodirs/EFI/BOOT/
+	xorriso -as mkisofs -R -J -b boot/limine/limine-bios-cd.bin -no-emul-boot \
+		-boot-load-size 4 -boot-info-table -hfsplus -apm-block-size 2048 \
+		--efi-boot boot/limine/limine-uefi-cd.bin -efi-boot-part --efi-boot-image \
+		--protective-msdos-label isodirs -o isobuilds/prolibOS.iso
+	./limine/limine bios-install isobuilds/prolibOS.iso
+	rm -rf isodirs
 
-$(ISO_FILE_RELEASE): $(OUTPUT_BIN)
-	mkdir -p $(ISO_DIR)/boot/grub
-	cp $(OUTPUT_BIN) $(ISO_DIR)/boot/prolibos.bin
-	echo 'set timeout=0' > $(ISO_DIR)/boot/grub/grub.cfg
-	echo 'set default=0' >> $(ISO_DIR)/boot/grub/grub.cfg
-	echo 'menuentry "prolibOS" {' >> $(ISO_DIR)/boot/grub/grub.cfg
-	echo '    multiboot2 /boot/prolibos.bin' >> $(ISO_DIR)/boot/grub/grub.cfg
-	echo '    set gfxpayload=1280x960x32' >> $(ISO_DIR)/boot/grub/grub.cfg
-	echo '    boot' >> $(ISO_DIR)/boot/grub/grub.cfg
-	echo '}' >> $(ISO_DIR)/boot/grub/grub.cfg
-	grub-mkrescue -o $@ $(ISO_DIR)
+# build limine
+limine/limine:
+	rm -rf limine
+	git clone https://github.com/limine-bootloader/limine.git --branch=v8.x-binary --depth=1
+	make -C limine
 
-release: $(ISO_FILE_RELEASE)
-	@echo "Release ISO created: $(ISO_FILE_RELEASE)"
-
-run: all
-	$(QEMU) -cdrom $(ISO_FILE)
-
-run-release: release
-	$(QEMU) -cdrom $(ISO_FILE_RELEASE)
-
-clean-no-iso:
-	rm -rf $(BUILD_DIR)/* $(ISO_DIR) prolibos.bin
-
+# cleanup
 clean:
-	rm -rf $(BUILD_DIR)/* $(ISO_FILE) $(ISO_FILE_RELEASE) $(ISO_DIR) prolibos.bin beta/*
+	rm -rf bin $(KERNEL_OBJ) isobuilds/prolibOS_debug.iso isobuilds/prolibOS.iso limine isodirs
+
+clean_no_iso:
+	rm -rf bin $(KERNEL_OBJ) limine isodirs
+
+# separate build targets
+debug: isobuilds/prolibOS_debug.iso
+
+release: isobuilds/prolibOS.iso
+
+# run in qemu
+run-debug: clean_no_iso debug
+	qemu-system-x86_64 -M q35 -cdrom isobuilds/prolibOS_debug.iso $(QEMUFLAGS)
+
+run-release: clean_no_iso release
+	qemu-system-x86_64 -M q35 -cdrom isobuilds/prolibOS.iso $(QEMUFLAGS)

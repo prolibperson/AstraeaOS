@@ -1,15 +1,16 @@
-/build/
-
-/isodir/
-
-!/release/
-
-prolibos.bin
-
-gitpublish.sh
+bin/
+isobuilds/
+isodirs/
 
 *.o
-$(BUILD_DIR)/*.o
-$(BUILD_DIR)/boot.o
+*.elf
+*.iso
 
-$(BUILD_DIR)/prolibos.bin
+limine/
+
+*.swp
+*.swo
+*~
+.DS_Store
+
+gitpublish.sh

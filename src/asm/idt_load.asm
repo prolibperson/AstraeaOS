@@ -5,5 +5,5 @@ section .text
 bits 64
 idt_load:
     cli
-    lidt [idt_descriptor]
+    lidt [rel idt_descriptor]
     ret

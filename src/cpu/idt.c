@@ -10,6 +10,7 @@ extern void exception_wrappers(void);
 
 #define WRAPPER_SIZE 16
 
+/* messages */
 const char *exception_messages[] = {
     "Division by Zero",
     "Debug",
@@ -45,26 +46,30 @@ const char *exception_messages[] = {
     "Reserved"
 };
 
+/* exception handler */
 void exception_handler(int num, uint64_t error_code) {
-    tprintfp(PRINT_ERROR, "\nKernel Panic!\n");
-    tprintfp(PRINT_ERROR, "Exception: %s (IDT %d, Error Code: 0x%lx)\n", exception_messages[num], num, error_code);
+    tprintf("\nKernel Panic!\n");
+    tprintf("Exception: %s (IDT %d, Error Code: 0x%lx)\n", exception_messages[num], num, error_code);
     while (1) asm volatile ("hlt");
 }
 
+/* register the handlers */
 void register_exception_handlers() {
     for (int i = 0; i < 32; i++) {
         idt_set_entry(i, (uint64_t)(exception_wrappers + i * WRAPPER_SIZE), 0x08, 0x8E);
     }
 }
 
+/* dummy handler */
 void dummy_handler(int irq) {
-    tprintfp(PRINT_DEBUG, "IRQ %d received.\n", irq);
+    tprintf("IRQ %d received.\n", irq);
     outb(0x20, 0x20);
     if (irq >= 8) {
         outb(0xA0, 0x20);
     }
 }
 
+/* remap pic */
 void pic_remap() {
     outb(0x20, 0x11);
     outb(0xA0, 0x11);
@@ -79,13 +84,15 @@ void pic_remap() {
     outb(0xA1, 0xFF);
 }
 
+/* check if the idt is set */
 bool idt_is_set(int num) {
     return idt[num].base_low != 0 || idt[num].base_high != 0 || idt[num].flags != 0;
 }
 
+/* fill up struct no one cares boring i hate explaining my own code */
 void idt_set_entry(int num, uint64_t base, uint16_t sel, uint8_t flags) {
     if (num < 0 || num >= 256) {
-        tprintfp(PRINT_ERROR, "Invalid IDT entry index: %d\n", num);
+        tprintf("Invalid IDT entry index: %d\n", num);
         return;
     }
 
@@ -102,22 +109,29 @@ void idt_set_entry(int num, uint64_t base, uint16_t sel, uint8_t flags) {
 #define IDT_FLAG_RING0   0x00
 #define IDT_FLAG_INT_GATE 0x0E
 
+/* idt init */
 void idt_init(void) {
     idt_descriptor.limit = sizeof(idt) - 1;
     idt_descriptor.base = (uint64_t)&idt;
 
+    /* fill entries */
     for (int i = 0; i < 256; i++) {
         idt_set_entry(i, 0, 0, 0);
     }
 
+    /* register exception handlers */
     register_exception_handlers();
 
+    /* register dummy handlers */
     for (int i = 32; i < 48; i++) {
+        /* if not keyboard interrupt gate */
         if (i != 33)
             idt_set_entry(i, (uint64_t)dummy_handler, 0x08, IDT_FLAG_PRESENT | IDT_FLAG_RING0 | IDT_FLAG_INT_GATE);
     }
 
+    /* remap pic */
     pic_remap();
 
+    /* assembly stub */
     idt_load();
 }

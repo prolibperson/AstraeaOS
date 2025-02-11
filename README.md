@@ -3,9 +3,9 @@
 <!-- PROJECT NAME -->
 <br />
 <div align="center">
-  <a href="https://github.com/prolibperson/prolib-os">
+  <!--<a href="https://github.com/prolibperson/prolib-os">
     <img src="image.png" alt="Logo" width="421" height="305">
-  </a>
+  </a>-->
 
   <h3 align="center">prolibOS</h3>
   <p align="center">
@@ -72,11 +72,11 @@ OS Dev and low level learning project.
 ## Roadmap
 
 - [x] Set up interrupts, an IDT and a GDT
-- [x] Make a cool looking logging system
 - [x] Add keyboard support
-- [x] Add Shell
 - [x] Move to 64-bit
-- [ ] VESA Bios Modes and move away from VGA Text Mode
+- [x] Switch to Limine
+- [x] Move away from VGA Text Mode
+- [ ] Add Shell
 - [ ] FAT-32 Filesystem
 - [ ] Add Custom Bootloader
 - [ ] TCP/IP Stack

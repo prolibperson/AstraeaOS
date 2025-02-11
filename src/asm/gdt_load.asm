@@ -4,7 +4,7 @@ extern gdt_descriptor
 section .text
 bits 64
 gdt_load:
-    lgdt [gdt_descriptor]
+    lgdt [rel gdt_descriptor]
 
     mov ax, 0x10
     mov ds, ax
