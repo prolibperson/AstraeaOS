@@ -59,12 +59,12 @@ OS Dev and low level learning project.
 ## Running
 
 - Using QEMU
-1. Run "make run-debug" or "make run-release" in the root directory of the project
+1. Run "make qemu-debug" or "make qemu-release" in the root directory of the project
    ```sh
-   make run-debug
+   make qemu-debug
    ```
    ```sh
-   make run-release
+   make qemu-release
    ```
 
 - If you dont wanna use QEMU

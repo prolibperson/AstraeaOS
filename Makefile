@@ -105,3 +105,9 @@ run-debug: clean_no_iso debug
 
 run-release: clean_no_iso release
 	qemu-system-x86_64 -M q35 -cdrom isobuilds/prolibOS.iso $(QEMUFLAGS)
+
+qemu-debug:
+	qemu-system-x86_64 -M q35 -cdrom isobuilds/prolibOS_debug.iso $(QEMUFLAGS)
+
+qemu-release:
+	qemu-system-x86_64 -M q35 -cdrom isobuilds/prolibOS.iso $(QEMUFLAGS)
