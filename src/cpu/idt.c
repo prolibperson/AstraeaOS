@@ -1,6 +1,7 @@
 #include "idt.h"
 #include "port.h"
 #include "terminal.h"
+#include "timer.h"
 
 struct idt_entry idt[256];
 struct idt_ptr idt_descriptor;

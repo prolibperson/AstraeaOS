@@ -8,12 +8,16 @@
 #define KEYBOARD_CMD_PORT 0x64
 #define INTERRUPT_ACK 0x20
 
+#define KEY_BUFFER_SIZE 256
+static char key_buffer[KEY_BUFFER_SIZE];
+static size_t key_buffer_pos = 0;
+
 static bool shift_pressed = false;
 
 extern void keyboard_handler_stub();
 
 void keyboard_handler_c(void) {
-    /* read interrupt */
+    /* read port */
     if (inb(0x64) & 0x01) {
         /* get scancode */
         uint8_t scancode = inb(KEYBOARD_PORT);
@@ -35,24 +39,39 @@ void keyboard_handler_c(void) {
         char key_char = shift_pressed ? scancode_to_char_shift[scancode]
                                       : scancode_to_char[scancode];
 
-        /* (placeholder) print out the key pressed */             
+        /* add key to keybuffer */
         if (key_char) {
+            /* check if the key pressed is backspace */
             if (scancode == '\b') {
-                terminal_putchar('\b');
-            } else {
-                terminal_putchar(key_char);
+                /* go back in key buffer and remove the last character */
+                if (key_buffer_pos > 0) {
+                    key_buffer_pos--;
+                    terminal_putchar('\b');
+                }
+            } 
+            /* else, add the key to the keybuffer */
+            else if (key_buffer_pos < KEY_BUFFER_SIZE - 1) {
+                key_buffer[key_buffer_pos++] = key_char;
             }
         }
     }
-    /* send end of interrupt */
     outb(0x20, INTERRUPT_ACK);
 }
 
-void keyboard_init(void) {
-    /* (debug) get status of keyboard port */
-    //uint8_t status = inb(KEYBOARD_CMD_PORT);
-    //tprintf("Keyboard controller status: 0x%x\n", status);
+/* get character from the keybuffer */
+char terminal_getchar(void) {
+    while (key_buffer_pos == 0) {
+        asm volatile ("hlt");
+    }
+    char c = key_buffer[0];
+    for (size_t i = 1; i < key_buffer_pos; i++) {
+        key_buffer[i - 1] = key_buffer[i];
+    }
+    key_buffer_pos--;
+    return c;
+}
 
+void keyboard_init(void) {
     /* set keyboard entry */
     idt_set_entry(33, (uint64_t)keyboard_handler_stub, 0x08, 0x8E);
 }

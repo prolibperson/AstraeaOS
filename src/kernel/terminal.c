@@ -14,25 +14,25 @@ static size_t fb_width = 0;
 static size_t fb_height = 0;
 static uint32_t terminal_color = 0xFFFFFF;
 
-static int cursor_visible = 1;
-
 /* determine terminal width and height based on framebuffer resolution */
 #define TERMINAL_WIDTH  (fb_width / CHAR_WIDTH)
 #define TERMINAL_HEIGHT (fb_height / CHAR_HEIGHT)
 
+static int cursor_visible = 1;
+
 /* reset cursor and fill framebuffer with black pixels */
 void terminal_clear() {
-    /* iterate through framebuffer and draw black pixels */
+    /* clear framebuffer */
     for (size_t y = 0; y < fb_height; y++) {
         for (size_t x = 0; x < fb_width; x++) {
             draw_pixel(framebuffer, pitch, x, y, 0x000000);
         }
     }
 
-    /* reset cursor */
     cursor_x = 0;
     cursor_y = 0;
 }
+
 
 /* initialize all vars and clear terminal */
 void terminal_initialize(uint32_t *fb, size_t fb_pitch, size_t height, size_t width) {
@@ -42,15 +42,16 @@ void terminal_initialize(uint32_t *fb, size_t fb_pitch, size_t height, size_t wi
     fb_height = height;
     cursor_x = 0;
     cursor_y = 0;
+
     terminal_clear();
 }
 
 /* draw cursor */
 void terminal_draw_cursor() {
     if (cursor_visible) {
-        draw_char(framebuffer, pitch, cursor_x * CHAR_WIDTH, cursor_y * CHAR_HEIGHT, CURSOR_CHAR, terminal_color);
+        
     } else {
-        draw_char(framebuffer, pitch, cursor_x * CHAR_WIDTH, cursor_y * CHAR_HEIGHT, ' ', 0x000000);  // Erase cursor
+        draw_char(framebuffer, pitch, cursor_x * CHAR_WIDTH, cursor_y * CHAR_HEIGHT, ' ', terminal_color);
     }
 }
 
@@ -93,35 +94,34 @@ void terminal_newline() {
 
 /* put char */
 void terminal_putchar(char c) {
-    /* call newline if char is newline */
     if (c == '\n') {
         terminal_newline();
         return;
     }
+    if (c == '\r') {
+        cursor_x = 0;
+        return;
+    }
 
-    /* backspace */
     if (c == '\b') {
         if (cursor_x > 0) {
             cursor_x--;
-            draw_char(framebuffer, pitch, cursor_x * CHAR_WIDTH, cursor_y * CHAR_HEIGHT, ' ', terminal_color);
+            draw_char(framebuffer, pitch, cursor_x * CHAR_WIDTH, cursor_y * CHAR_HEIGHT, ' ', 0x000000);
         } else if (cursor_y > 0) {
             cursor_y--;
             cursor_x = TERMINAL_WIDTH - 1;
-            draw_char(framebuffer, pitch, cursor_x * CHAR_WIDTH, cursor_y * CHAR_HEIGHT, ' ', terminal_color);
+            draw_char(framebuffer, pitch, cursor_x * CHAR_WIDTH, cursor_y * CHAR_HEIGHT, ' ', 0x000000);
         }
         return;
     }
 
-    /* check for if we're drawing outside of terminal */
     if (cursor_x >= TERMINAL_WIDTH || cursor_y >= TERMINAL_HEIGHT) {
         return;
     }
 
-    /* draw the char and move cursor */
     draw_char(framebuffer, pitch, cursor_x * CHAR_WIDTH, cursor_y * CHAR_HEIGHT, c, terminal_color);
-    cursor_x++;
 
-    /* newline if cursor exceeds terminal width */
+    cursor_x++;
     if (cursor_x >= TERMINAL_WIDTH) {
         terminal_newline();
     }

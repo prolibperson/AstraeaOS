@@ -80,7 +80,7 @@ OS Dev and low level learning project.
 - [x] Move to 64-bit
 - [x] Switch to Limine
 - [x] Move away from VGA Text Mode
-- [ ] Add Shell
+- [x] Add Shell
 - [ ] FAT-32 Filesystem
 - [ ] Add Custom Bootloader
 - [ ] TCP/IP Stack

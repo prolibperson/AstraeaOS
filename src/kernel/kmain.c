@@ -7,6 +7,8 @@
 #include "gdt.h"
 #include "idt.h"
 #include "keyboard.h"
+#include "shell.h"
+#include "timer.h"
 
 uint32_t *fb_ptr = 0;
 size_t width = 0;
@@ -62,7 +64,7 @@ void kmain(void) {
 
     /* initialize terminal */
     terminal_initialize(fb_ptr, pitch, height, width);
-    terminal_printf("Please note the shell is like nonexistent because im in the middle of a rewrite...\n");
+    //terminal_printf("Please note the shell is like nonexistent because im in the middle of a rewrite...\n");
     terminal_printf("Welcome to prolibOS!\n");
 
 #ifdef DEBUG_BUILD
@@ -74,10 +76,10 @@ void kmain(void) {
     idt_init();
     pic_remap();
     keyboard_init();
+    timer_init();
     asm volatile ("sti"); /* enables interrupts */
 
-    /* placeholder aaaa */
-    terminal_printf("\nuser@prolibOS $ ");
+    shell_run();
 
     /* halt cpu or else we exit the entrypoint and just return to bios */
     halt();
