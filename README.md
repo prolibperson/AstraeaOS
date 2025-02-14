@@ -7,7 +7,7 @@
     <img src="image.png" alt="Logo" width="934.6" height="657.3">
   </a>
 
-  <h3 align="center">prolibOS</h3>
+  <h3 align="center">AstraeaOS</h3>
   <p align="center">
     An x86_64 operating system.
   </p>
