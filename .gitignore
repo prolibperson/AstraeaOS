@@ -5,8 +5,6 @@ isodirs/
 *.elf
 *.iso
 
-limine/
-
 *.swp
 *.swo
 *~
