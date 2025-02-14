@@ -92,7 +92,7 @@ OS Dev and low level learning project.
 
 prolib - [@prolibperson](https://twitter.com/prolibperson) - prolib69420@gmail.com
 
-Project Link: [https://github.com/prolibperson/prolib-os](https://github.com/prolibperson/prolib-os)
+Project Link: [https://github.com/prolibperson/AstraeaOS](https://github.com/prolibperson/prolib-os)
 
 
 <!-- ACKNOWLEDGMENTS -->
