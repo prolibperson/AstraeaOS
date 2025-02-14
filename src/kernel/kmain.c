@@ -64,21 +64,56 @@ void kmain(void) {
 
     /* initialize terminal */
     terminal_initialize(fb_ptr, pitch, height, width);
-    //terminal_printf("Please note the shell is like nonexistent because im in the middle of a rewrite...\n");
-    terminal_printf("Welcome to prolibOS!\n");
+    terminal_setcolor(0xFF00FF);
+    tprintf("Starting Boot Process!\n\n");
 
+    /* interrupts and keyboard driver init */
+    gdt_init();
+    //terminal_setcolor_gradient(8);
+    tprintf("[INIT] GDT Initialized\n");
+
+    idt_init();
+    pic_remap();
+    //terminal_setcolor_gradient(10);
+    tprintf("[INIT] IDT Initialized\n");
+
+    keyboard_init();
+    //terminal_setcolor_gradient(12);
+    tprintf("[INIT] Keyboard Initialized\n");
+
+    timer_init();
+    asm volatile ("sti"); /* enables interrupts */
+    //terminal_setcolor_gradient(14);
+    tprintf("[INIT] Timer Initialized\n");
+
+    //terminal_setcolor_gradient(16);
+    tprintf("[INIT] Initializing Shell\n");
+
+    for (size_t i = 0; i < 10; i++) {
+        terminal_setcolor_gradient(i * 2);
+        tprintf("\n");
+        switch (i) {
+            case 0: tprintf("         .8.           "); terminal_setcolor(0xCC00CC); tprintf("Welcome to AstraeaOS!"); terminal_setcolor_gradient(i * 2); break;
+            case 1: tprintf("        .888.          "); break;
+            case 2: tprintf("       :88888.         "); terminal_setcolor(0xCC00CC); tprintf("Version v0.1.1"); terminal_setcolor_gradient(i * 2); break;
+            case 3: tprintf("      . `88888.       "); break;
+            case 4: tprintf("     .8. `88888.      "); break;
+            case 5: tprintf("    .8`8. `88888.     "); break;
+            case 6: tprintf("   .8' `8. `88888.    "); break;
+            case 7: tprintf("  .8'   `8. `88888.   "); break;
+            case 8: tprintf(" .888888888. `88888.  "); break;
+            case 9: tprintf(".8'       `8. `88888."); break;
+        }
+    }
+
+    /* inform if debug build preprocessor is defined */
 #ifdef DEBUG_BUILD
     tprintf("Debug Build preprocessor defined!\n");
 #endif
-    
-    /* interrupts and keyboard driver init */
-    gdt_init();
-    idt_init();
-    pic_remap();
-    keyboard_init();
-    timer_init();
-    asm volatile ("sti"); /* enables interrupts */
 
+    tprintf("\n\n");
+
+    /* run shell */
     shell_run();
 
     /* halt cpu or else we exit the entrypoint and just return to bios */

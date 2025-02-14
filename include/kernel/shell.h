@@ -15,3 +15,5 @@ void shell_help(void);
 void shell_echo(void);
 void shell_clear(void);
 void shell_reboot(void);
+void shell_rng(void);
+void shell_info(void);

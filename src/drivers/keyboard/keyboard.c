@@ -8,9 +8,8 @@
 #define KEYBOARD_CMD_PORT 0x64
 #define INTERRUPT_ACK 0x20
 
-#define KEY_BUFFER_SIZE 256
-static char key_buffer[KEY_BUFFER_SIZE];
-static size_t key_buffer_pos = 0;
+char key_buffer[KEY_BUFFER_SIZE];
+size_t key_buffer_pos = 0;
 
 static bool shift_pressed = false;
 

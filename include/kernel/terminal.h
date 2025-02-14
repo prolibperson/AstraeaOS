@@ -11,3 +11,5 @@ void terminal_putchar(char c);
 void terminal_printf(const char *fmt, ...);
 void terminal_draw_cursor();
 void terminal_toggle_cursor();
+void terminal_setcolor(uint32_t color);
+void terminal_setcolor_gradient(size_t line);

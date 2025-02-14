@@ -12,23 +12,21 @@ static int tick_count = 0;
 
 void timer_handler() {
     tick_count++;
-    if (tick_count >= 9) { // Approximately 500ms (assuming 18.2Hz PIT)
+    if (tick_count >= 9) {
         terminal_toggle_cursor();
         tick_count = 0;
     }
 
-    // Send EOI (End of Interrupt) to PIC
     outb(0x20, 0x20);
 }
 
-/* Initialize the PIT to a frequency of 18.2Hz */
 void timer_init() {
-    uint16_t divisor = 65536 / 18;  // 1.193182 MHz / 18.2Hz = 65536 / 18
+    uint16_t divisor = 65536 / 18;
 
     /* timer */
     idt_set_entry(32, (uint64_t)timer_handler_stub, 0x08, IDT_FLAG_PRESENT | IDT_FLAG_RING0 | IDT_FLAG_INT_GATE);
 
-    outb(0x43, 0x36);             // Command port: Channel 0, Mode 3, Binary
-    outb(0x40, divisor & 0xFF);   // Low byte
-    outb(0x40, divisor >> 8);     // High byte
+    outb(0x43, 0x36);
+    outb(0x40, divisor & 0xFF);
+    outb(0x40, divisor >> 8);
 }

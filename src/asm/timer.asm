@@ -5,7 +5,6 @@ extern timer_handler
 extern terminal_toggle_cursor
 
 timer_handler_stub:
-    ; Save registers
     push rax
     push rcx
     push rdx
@@ -23,14 +22,11 @@ timer_handler_stub:
     push r14
     push r15
 
-    ; Call the C handler
-    mov rdi, 0        ; IRQ0 (timer) does not have an error code
+    mov rdi, 0
     call timer_handler
 
-    ; Toggle the cursor visibility every interrupt (0.5s or 1s based on timer frequency)
     call terminal_toggle_cursor
 
-    ; Restore registers
     pop r15
     pop r14
     pop r13
@@ -48,5 +44,4 @@ timer_handler_stub:
     pop rcx
     pop rax
 
-    ; Return from interrupt
     iretq

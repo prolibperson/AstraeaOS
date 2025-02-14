@@ -61,6 +61,18 @@ void terminal_toggle_cursor() {
     terminal_draw_cursor();
 }
 
+/* set the terminal text color */
+void terminal_setcolor(uint32_t color) {
+    terminal_color = color;
+}
+
+void terminal_setcolor_gradient(size_t line) {
+    uint8_t red = (line * 15) % 256;
+    uint8_t green = (line * 5) % 256;
+    uint8_t blue = 255;
+    terminal_color = (red << 16) | (green << 8) | blue;
+}
+
 /* scroll */
 void terminal_scroll() {
     /* scroll everything up */
