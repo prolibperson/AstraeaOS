@@ -3,7 +3,7 @@
 <!-- PROJECT NAME -->
 <br />
 <div align="center">
-  <a href="https://github.com/prolibperson/prolib-os">
+  <a href="https://github.com/prolibperson/AstraeaOS">
     <img src="image.png" alt="Logo" width="934.6" height="657.3">
   </a>
 
@@ -92,7 +92,7 @@ OS Dev and low level learning project.
 
 prolib - [@prolibperson](https://twitter.com/prolibperson) - prolib69420@gmail.com
 
-Project Link: [https://github.com/prolibperson/AstraeaOS](https://github.com/prolibperson/prolib-os)
+Project Link: [https://github.com/prolibperson/AstraeaOS](https://github.com/prolibperson/AstraeaOS)
 
 
 <!-- ACKNOWLEDGMENTS -->
@@ -102,4 +102,4 @@ Project Link: [https://github.com/prolibperson/AstraeaOS](https://github.com/pro
 
 ## License
 
-This project is licensed under the [GNU GENERAL PUBLIC LICENSE v3 (GPLv3)](https://github.com/prolibperson/prolib-os/blob/main/LICENSE)
+This project is licensed under the [GNU GENERAL PUBLIC LICENSE v3 (GPLv3)](https://github.com/prolibperson/AstraeaOS/blob/main/LICENSE)
