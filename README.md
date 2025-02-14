@@ -3,9 +3,9 @@
 <!-- PROJECT NAME -->
 <br />
 <div align="center">
-  <!--<a href="https://github.com/prolibperson/prolib-os">
-    <img src="image.png" alt="Logo" width="421" height="305">
-  </a>-->
+  <a href="https://github.com/prolibperson/prolib-os">
+    <img src="image.png" alt="Logo" width="934.6" height="657.3">
+  </a>
 
   <h3 align="center">prolibOS</h3>
   <p align="center">
