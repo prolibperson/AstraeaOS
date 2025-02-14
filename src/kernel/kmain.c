@@ -89,6 +89,11 @@ void kmain(void) {
     //terminal_setcolor_gradient(16);
     tprintf("[INIT] Initializing Shell\n");
 
+        /* inform if debug build preprocessor is defined */
+#ifdef DEBUG_BUILD
+    tprintf("[INFO] Debug Build preprocessor defined!\n");
+#endif
+
     for (size_t i = 0; i < 10; i++) {
         terminal_setcolor_gradient(i * 2);
         tprintf("\n");
@@ -105,11 +110,6 @@ void kmain(void) {
             case 9: tprintf(".8'       `8. `88888."); break;
         }
     }
-
-    /* inform if debug build preprocessor is defined */
-#ifdef DEBUG_BUILD
-    tprintf("Debug Build preprocessor defined!\n");
-#endif
 
     tprintf("\n\n");
 
